@@ -27,5 +27,11 @@ class Database{
  
         return $this->connection;
     }
+
+    public function initDatabaseTables(){
+        $this->connection->exec('CREATE TABLE IF NOT EXISTS users (id int, username varchar(255), PRIMARY KEY (id));');
+        $this->connection->exec('CREATE TABLE IF NOT EXISTS messages (id int, sendby int, context longtext, sendto int, PRIMARY KEY (id), FOREIGN KEY (sendto) REFERENCES users(id), FOREIGN KEY (sendby) REFERENCES users(id));');
+        $this->connection->exec('CREATE TABLE IF NOT EXISTS sessions (id int, userid int, created timestamp, FOREIGN KEY (userid) REFERENCES users(id));');
+    }
 }
 ?>
