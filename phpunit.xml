@@ -1,0 +1,5 @@
+<testsuites>
+  <testsuite name="PHPChat">
+    <directory>tests</directory>
+  </testsuite>
+</testsuites>

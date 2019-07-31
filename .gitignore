@@ -1,1 +1,3 @@
 set_enviroment_values.ps1
+vendor
+.phpunit.result.cache
