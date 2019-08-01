@@ -5,9 +5,8 @@ class User{
     private $session_id;
     private $connection;
 
-    function __construct(PDO $connection, $username) {
+    function __construct(PDO $connection) {
         $this->connection = $connection;
-        $this->setUserId($username);
     }
 
     private function setUserId($username){
@@ -20,16 +19,17 @@ class User{
         return $this->user_id;
     }
 
-    public function createSession(){
+    public function createSession($username){
         //Create a new session on sessions table
         //Then return the unique id
         //This function can be altered to add username password login later on
         if(isset($this->user_id) === false){
-
-        } 
-        $query = $this->connection->prepare('INSERT INTO sessions (userid) VALUES (?)');
+            $this->setUserId($username);
+        }
+        $query = $this->connection->prepare('INSERT INTO sessions (userid,created) VALUES (?,NOW())');
         $query->execute([$this->user_id]);
-
+        $this->session_id=$this->connection->lastInsertId();
+        return $this->session_id;
     }
 
 
