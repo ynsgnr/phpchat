@@ -1,4 +1,4 @@
-set_enviroment_values.ps1
+set_enviroment_values.*
 vendor
 .phpunit.result.cache
 composer.lock
