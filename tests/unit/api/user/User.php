@@ -29,7 +29,6 @@ class User_Test extends TestCase
         $db = new Database();
         $this->user = new User($db->connect2database());
         $this->assertIsNumeric($this->user->createSession("testuser"));
-        $this->assertEquals(1,$this->user->getUserId());
     }
     
     /**
@@ -51,8 +50,8 @@ class User_Test extends TestCase
     {
         $db = new Database();
         $this->user = new User($db->connect2database());
-        $this->user->createSession("testuser");
-        $this->assertEquals(true,$this->user->checkSession());
+        $sid = $this->user->createSession("testuser");
+        $this->assertEquals(true,$this->user->checkSession($sid,"testuser"));
     }
 
     /**
@@ -63,7 +62,7 @@ class User_Test extends TestCase
     {
         $db = new Database();
         $this->user = new User($db->connect2database());
-        $this->user->createSession("testuser3");
-        $this->assertEquals(false,$this->user->checkSession());
+        $sid = $this->user->createSession("testuser3");
+        $this->assertEquals(false,$this->user->checkSession($sid,"testuser"));
     }
 }

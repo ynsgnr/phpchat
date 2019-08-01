@@ -61,6 +61,6 @@ class Message_Test extends TestCase
         $this->message = new Message();
         $user = new User($connection);
         $user->createSession("testuser");
-        $this->assertIsArray($this->message->receiveAllMessages($connection,$user));
+        $this->assertIsArray($this->message->receiveAllMessages($connection,"testuser"));
     }
 }
