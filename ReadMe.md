@@ -23,3 +23,6 @@ PHP7 and Composer is needed. Check `php.ini` and `composer.json` for more info
 | /api/v1/recievemessages | session_id, username                     | array of messages with sender, context, reciever, sendat |
 
 Check `router.php` for more info
+
+# Database Init
+You can init the database using `initDatabaseTables()` function in  `Database` class.
