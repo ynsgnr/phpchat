@@ -8,7 +8,7 @@ class Database{
     public $connection;
 
     function __construct() {
-        $this->host = $_ENV["HOST"];
+        $this->host = $_ENV["DB_HOST"];
         $this->db_name = $_ENV["DB_NAME"];
         $this->username = $_ENV["DB_USER"];
         $this->password = $_ENV["PASS"];
