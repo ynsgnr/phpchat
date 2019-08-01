@@ -8,10 +8,10 @@ class Database{
     public $connection;
 
     function __construct() {
-        $this->host = $_ENV["DB_HOST"];
-        $this->db_name = $_ENV["DB_NAME"];
-        $this->username = $_ENV["DB_USER"];
-        $this->password = $_ENV["PASS"];
+        $this->host = getenv("DB_HOST");
+        $this->db_name = getenv("DB_NAME");
+        $this->username = getenv("DB_USER");
+        $this->password = getenv("PASS");
     }
  
     public function connect2database(){
