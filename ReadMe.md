@@ -4,10 +4,10 @@ PHP7 and Composer is needed. Check `php.ini` and `composer.json` for more info
 # Enviroment Values:
 | Variable Name | Explanation                                                |
 | ------------- |:----------------------------------------------------------:|
-| HOST          | sql host with port number                                  |
+| DB_HOST          | sql host with port number                                  |
 | DB_NAME       | db name                                                    |
 | DB_USER       | db username                                                |
-| PASS          | user's password on db                                      |
+| DB_PASS          | user's password on db                                      |
 | PHPRC         | project folder for using `php.ini` in this project         |
 | EXT_PATH      | extenstion path (defult is `{PHP install directory}\ext` ) |
 

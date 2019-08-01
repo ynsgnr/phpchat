@@ -11,7 +11,7 @@ class Database{
         $this->host = getenv("DB_HOST");
         $this->db_name = getenv("DB_NAME");
         $this->username = getenv("DB_USER");
-        $this->password = getenv("PASS");
+        $this->password = getenv("DB_PASS");
     }
  
     public function connect2database(){
