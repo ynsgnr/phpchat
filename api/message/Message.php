@@ -15,7 +15,7 @@ class Message{
         if(isset($connection) === false or isset($this->sender) === false or isset($this->reciever) === false or isset($this->context) === false){
             throw new InvalidArgumentException("Please set sender,reciever and context!", 1);
         }
-        $query = $connection->prepare('INSERT INTO messages (context,sender,reciever,sendat) VALUES (?,?,?,NOW())');
+        $query = $connection->prepare('INSERT INTO messages (context,sendby,sendto,sendat) VALUES (?,?,?,NOW());');
         $query->execute([$this->context,$this->sender,$this->reciever]);
         $this->message_id=$connection->lastInsertId();
         return $this->message_id;
@@ -26,7 +26,7 @@ class Message{
             throw new InvalidArgumentException("Please set userid of user", 1);
         }
         $messages = array();
-        $query = $connection->prepare('SELECT context,sender,sendat FROM messages WHERE reciever==(?) ORDER BY sendat DESC');
+        $query = $connection->prepare('SELECT context,sender,sendat FROM messages WHERE reciever==(?) ORDER BY sendat DESC;');
         $query->execute([$user->getUserId()]);
         $fetched = $query->fetchAll();
         foreach ($fetched as $m) {
