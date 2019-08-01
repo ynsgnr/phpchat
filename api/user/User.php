@@ -22,9 +22,12 @@ class User{
     public function createSession($username){
         //Create a new session on sessions table
         //Then return the unique id
-        //This function can be altered to add username password login later on
+        //This function can be altered to add username password login or security measurements later on
         if(isset($this->user_id) === false){
             $this->setUserId($username);
+            if(isset($this->user_id) === false){
+                return -1;
+            }
         }
         $query = $this->connection->prepare('INSERT INTO sessions (userid,created) VALUES (?,NOW())');
         $query->execute([$this->user_id]);
@@ -34,14 +37,12 @@ class User{
 
     public function checkSession(){
         if(isset($this->user_id) === false){
-            throw new InvalidArgumentException("Please set userid of user", 1);
+            return false;
         }
         $query = $this->connection->prepare('SELECT (id) FROM sessions WHERE userid=(?) ORDER BY created DESC LIMIT 1');
         $query->execute([$this->user_id]);
         $session_id = $query->fetchAll()[0]['id'];
         return $this->session_id == $session_id;
     }
-
-
 }
 ?>
