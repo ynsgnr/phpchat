@@ -16,10 +16,10 @@ PHP7 and Composer is needed. Check `php.ini` and `composer.json` for more info
 
  # Endpoints
  ## V1
-| Endpont                 | Input                                  | Returns
-| ----------------------- |:--------------------------------------:|:--------------------------------------:|
-| /api/v1/initsession     | username                               | session_id |
-| /api/v1/sendmessage     | session_id, sender, context, reciever  | message_id |
-| /api/v1/recievemessages | session_id                             | array of messages with sender, context, reciever, sendat |
+| Endpont                 | Input                                    | Returns
+| ----------------------- |:----------------------------------------:|:--------------------------------------:|
+| /api/v1/initsession     | username                                 | session_id |
+| /api/v1/sendmessage     | session_id, username, context, reciever  | message_id |
+| /api/v1/recievemessages | session_id, username                     | array of messages with sender, context, reciever, sendat |
 
 Check `router.php` for more info

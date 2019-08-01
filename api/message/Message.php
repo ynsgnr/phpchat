@@ -21,18 +21,15 @@ class Message{
         return $this->message_id;
     }
 
-    public function receiveAllMessages(PDO $connection,User $user){
-        if(is_null($user->getUserId()) === true ){
-            throw new InvalidArgumentException("Please set userid of user", 1);
-        }
+    public function receiveAllMessages(PDO $connection,$username){
         $messages = array();
-        $query = $connection->prepare('SELECT context,sender,sendat FROM messages WHERE reciever==(?) ORDER BY sendat DESC;');
-        $query->execute([$user->getUserId()]);
+        $query = $connection->prepare('SELECT context,sendby,sendat FROM messages WHERE sendto=? ORDER BY sendat DESC;');
+        $query->execute([$username]);
         $fetched = $query->fetchAll();
         foreach ($fetched as $m) {
             $message = new Message();
-            $message->sender = $m['sender'];
-            $message->reciever = $m['reciever'];
+            $message->sender = $m['sendby'];
+            $message->reciever = $username;
             $message->context = $m['context'];
             $message->sendat = $m['sendat'];
             array_push($messages,$message); 

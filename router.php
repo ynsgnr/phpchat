@@ -11,8 +11,8 @@ $database = new Database();
 $db = $database->connect2database();
 $user = new User($db);
 
-$request = $_SERVER->REQUEST_URI;
-$method = $_SERVER->REQUEST_METHOD;
+$request = $_SERVER['REQUEST_URI'];
+$method = $_SERVER['REQUEST_METHOD'];
 
 if($method!="POST"){
     http_response_code(404);
@@ -35,20 +35,20 @@ if($method!="POST"){
             }
             break;
         case '/api/v1/sendmessage':
-            if (is_null($data->session_id) and is_null($data->sender) and is_null($data->reciever) and is_null($data->context)){
+            if (!isset($data->session_id) or !isset($data->reciever) or !isset($data->context) or !isset($data->username)){
                 http_response_code(400);
                 echo json_encode(
-                    array("message" => "session_id, sender, reciever, context must exist in body")
+                    array("message" => "session_id, username, reciever, context must exist in body")
                 );
             }
-            else if ($user->checksession()==false){
+            else if ($user->checksession($data->session_id,$data->username)==false){
                 http_response_code(401);
                 echo json_encode(
                     array("message" => "session is not valid")
                 );
             }else{
                 $message = new Message();
-                $message->sender=$data->sender;
+                $message->sender=$data->username;
                 $message->context=$data->context;
                 $message->reciever=$data->reciever;
                 $message->send($db);
@@ -56,14 +56,15 @@ if($method!="POST"){
                     array("message" => "success")
                 );
             }
+            break;
         case '/api/v1/recievemessages':
-            if (is_null($data->session_id)){
+            if (!isset($data->session_id) or !isset($data->username)){
                 http_response_code(400);
                 echo json_encode(
-                    array("message" => "session_id must exist in body")
+                    array("message" => "session_id and username must exist in body")
                 );
             }
-            else if ($user->checksession()==false){
+            else if ($user->checksession($data->session_id,$data->username)==false){
                 http_response_code(401);
                 echo json_encode(
                     array("message" => "session is not valid")
@@ -71,9 +72,10 @@ if($method!="POST"){
             }else{
                 $message = new Message();
                 echo json_encode(
-                    $message->receiveAllMessages($db,$user)
+                    $message->receiveAllMessages($db,$data->username)
                 );
             }
+            break;
         default:
             http_response_code(404);
             echo json_encode(
