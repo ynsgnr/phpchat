@@ -1,8 +1,8 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-require_once('api/user/Message.php');
-require_once('api/config/User.php');
+require_once('api/message/Message.php');
+require_once('api/config/Database.php');
 
 class Message_Test extends TestCase
 {
@@ -17,18 +17,30 @@ class Message_Test extends TestCase
     public function testConstruct()
     {
         $db = new Database();
-        $this->message = new User($db->connect2database());
+        $this->message = new Message($db->connect2database());
         $this->assertInstanceOf(Message::class, $this->message);
     }
 
     /**
      * @depends testConstruct
      */
-    public function testCrateSession()
+    public function testSend()
     {
         $db = new Database();
-        $this->message = new User($db->connect2database());
+        $this->message = new Message($db->connect2database());
         $this->expectException(InvalidArgumentException::class);
-        $this->message->send()
+        $this->message->send();
+    }
+
+    /**
+     * @depends testConstruct
+     */
+    public function testSendWithValues()
+    {
+        $db = new Database();
+        $this->message = new Message($db->connect2database());
+        $this->message->sender = 1;
+        $this->message->reciever = 7;
+        $this->assertEquals(true,$this->message->send());
     }
 }
