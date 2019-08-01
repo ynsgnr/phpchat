@@ -31,4 +31,16 @@ class User_Test extends TestCase
         $this->assertIsNumeric($this->user->createSession("testuser"));
         $this->assertEquals(1,$this->user->getUserId());
     }
+
+    /**
+     * @depends testConstruct
+     * @depends testCrateSession
+     */
+    public function testCheckSession()
+    {
+        $db = new Database();
+        $this->user = new User($db->connect2database());
+        $this->user->createSession("testuser");
+        $this->assertEquals(true,$this->user->checkSession());
+    }
 }

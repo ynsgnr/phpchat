@@ -32,6 +32,16 @@ class User{
         return $this->session_id;
     }
 
+    public function checkSession(){
+        if(isset($this->user_id) === false){
+            throw new InvalidArgumentException("Please set userid of user", 1);
+        }
+        $query = $this->connection->prepare('SELECT (id) FROM sessions WHERE userid=(?) ORDER BY created DESC LIMIT 1');
+        $query->execute([$this->user_id]);
+        $session_id = $query->fetchAll()[0]['id'];
+        return $this->session_id == $session_id;
+    }
+
 
 }
 ?>
