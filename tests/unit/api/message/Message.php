@@ -41,6 +41,6 @@ class Message_Test extends TestCase
         $this->message = new Message($db->connect2database());
         $this->message->sender = 1;
         $this->message->reciever = 7;
-        $this->assertEquals(true,$this->message->send());
+        $this->assertIsNumeric($this->message->send());
     }
 }
