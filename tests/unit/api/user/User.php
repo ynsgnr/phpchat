@@ -66,3 +66,4 @@ class User_Test extends TestCase
         $this->assertEquals(false,$this->user->checkSession($sid,"testuser"));
     }
 }
+?>

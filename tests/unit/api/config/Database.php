@@ -32,3 +32,4 @@ class Database_Test extends TestCase
         $this->assertInstanceOf(PDO::class, $this->database->connect2database());
     }
 }
+?>

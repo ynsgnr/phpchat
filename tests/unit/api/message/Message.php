@@ -64,3 +64,4 @@ class Message_Test extends TestCase
         $this->assertIsArray($this->message->receiveAllMessages($connection,"testuser"));
     }
 }
+?>
