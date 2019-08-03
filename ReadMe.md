@@ -26,3 +26,7 @@ Check `router.php` for more info
 
 # Database Init
 You can init the database using `initDatabaseTables()` function in  `Database` class.
+
+# PostMan Tests:
+You can use this postman link to display more info:
+https://documenter.getpostman.com/view/5352982/SVYowM1r?version=latest
