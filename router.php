@@ -19,6 +19,12 @@ $app = AppFactory::create();
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
 
+$mr = new mRouter(new mConnectionSQLwDel(new DatabaseConfig()),$app);
+$mr->run();
+
+$app->run();
+
+/*
 $app->post('/api/v1/initsession', function (Request $request, Response $response, $args) {
     $database = new DatabaseConnection();
     $db = $database->connect2database();
@@ -30,14 +36,6 @@ $app->post('/api/v1/initsession', function (Request $request, Response $response
     return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/api/v1/sendmessage', function (Request $request, Response $response, $args) {
-    $mr = new mRouter(new mConnectionSQLwDel(new DatabaseConfig()));
-    return $mr->mPost($request, $response, $args); // parses request from file_get_contents('php://input') I couldnt get to use request object with json :(
-});
-
-$app->run();
-
-/*
 $request = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -57,30 +55,7 @@ if($method!="POST"){
                 );
             }else{
             }
-            break;
-        case '/api/v1/sendmessage':
-            if (!isset($data->session_id) or !isset($data->reciever) or !isset($data->context) or !isset($data->username)){
-                http_response_code(400);
-                echo json_encode(
-                    array("message" => "session_id, username, reciever, context must exist in body")
-                );
-            }
-            else if ($user->checksession($data->session_id,$data->username)==false){
-                http_response_code(401);
-                echo json_encode(
-                    array("message" => "session is not valid")
-                );
-            }else{
-                $message = new Message();
-                $message->sender=$data->username;
-                $message->context=$data->context;
-                $message->reciever=$data->reciever;
-                $message->send($db);
-                echo json_encode(
-                    array("message" => "success")
-                );
-            }
-            break;
+            break
         case '/api/v1/recievemessages':
             if (!isset($data->session_id) or !isset($data->username)){
                 http_response_code(400);
