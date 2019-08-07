@@ -3,7 +3,7 @@
 require_once('api/message/Message.php');
 require_once('api/message/mConnection/interfaces/mConnectionInterface.php');
 
-class getSend extends Message{
+class connectedMessage extends Message{
     private $connection;
 
     function __construct(mConnectionInterface $c){
@@ -11,15 +11,15 @@ class getSend extends Message{
         $this->connection = $c;
     }
 
-    public function get($id){
+    protected function get($id){
         return $this->connection->recieve($id);
     }
 
-    public function getAllFor($username){
+    protected function getAllFor($username){
         return $this->connection->recieveAll($username);
     }
 
-    public function send(){
+    protected function send(){
         return $this->connection->send($this);
     }
 }

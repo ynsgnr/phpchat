@@ -12,7 +12,7 @@ class mConnectionSQL implements mConnectionInterface{
     }
 
     public function send($message): int{
-        if(isset($this->connection) === false or isset($message->sender) === false or isset($message->reciever) === false or isset($message->context) === false){
+        if(isset($message->sender) === false or isset($message->reciever) === false or isset($message->context) === false){
             throw new InvalidArgumentException("Please set sender,reciever and context!", 1);
         }
         $query = $this->connection->prepare('INSERT INTO messages (context,sendby,sendto,sendat) VALUES (?,?,?,NOW());');

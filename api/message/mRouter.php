@@ -3,9 +3,9 @@
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-require_once('api/message/mConnection/getSendWdel.php');
+require_once('api/message/mConnection/connectedMessageWdel.php');
 
-class mRouter extends getSendWdel{
+class mRouter extends connectedMessageWdel{
 
     private $app;
 
@@ -14,7 +14,7 @@ class mRouter extends getSendWdel{
         $this->app = $app;
     }
     
-    public function mPost($request, $response, $args){
+    private function mPost($request, $response, $args){
         $parsedBody = json_decode(file_get_contents('php://input'), true); //Can be changed to request object
         $this->sender=$parsedBody['username'];
         $this->context=$parsedBody['context'];
@@ -24,7 +24,7 @@ class mRouter extends getSendWdel{
         return $response->withAddedHeader('Location', $_SERVER['HTTP_HOST'] . '/api/v1/message/'.$this->message_id);
     }
 
-    public function mGet($request, $response, $args){
+    private function mGet($request, $response, $args){
         $id = $args['id'];
         $message = $this->get($id);
         $response->getBody()->write(
@@ -34,10 +34,19 @@ class mRouter extends getSendWdel{
         );
         return $response
         ->withHeader('Content-Type', 'application/json');
+    }
+
+    private function mDel($request, $response, $args){
+        $id = $args['id'];
+        if ($this->delete($id)==false){
+            return $response->withStatus(404);
+        }
+        return $response;
     }   
 
-    public function mGetAll($request, $response, $args){
+    private function mGetAll($request, $response, $args){
         //Should add user check
+        //Should return 404 if user not found
         $user = $args['user'];
         $messages = $this->getAllFor($user);
         $response->getBody()->write(
@@ -60,6 +69,10 @@ class mRouter extends getSendWdel{
         
         $this->app->get('/api/v1/message/{id}',function (Request $request, Response $response, $args) {
             return $this->mGet($request, $response, $args);
+        });
+
+        $this->app->delete('/api/v1/message/{id}',function (Request $request, Response $response, $args) {
+            return $this->mDel($request, $response, $args);
         });
     }
 
