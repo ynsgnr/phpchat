@@ -18,7 +18,7 @@ class mConnectionSQL implements mConnectionInterface{
         $query = $this->connection->prepare('INSERT INTO messages (context,sendby,sendto,sendat) VALUES (?,?,?,NOW());');
         $query->execute([$message->context,$message->sender,$message->reciever]);
         $message->message_id=$this->connection->lastInsertId();
-        return $this->message_id;
+        return $message->message_id;
     }
 
     public function recieve($id): Message{
@@ -26,10 +26,10 @@ class mConnectionSQL implements mConnectionInterface{
         $query->execute([$id]);
         $fetched = $query->fetchAll();
         $message = new Message();
-        $message->sender = $m[0]['sendby'];
-        $message->reciever = $m[0]['sendto'];
-        $message->context = $m[0]['context'];
-        $message->sendat = $m[0]['sendat'];
+        $message->sender = $fetched[0]['sendby'];
+        $message->reciever = $fetched[0]['sendto'];
+        $message->context = $fetched[0]['context'];
+        $message->sendat = $fetched[0]['sendat'];
         return $message;
     }
 
