@@ -1,16 +1,43 @@
 <?php
-// required headers
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
 
-include_once('api/config/Database.php');
-include_once('api/user/User.php');
-include_once('api/message/Message.php');
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Factory\AppFactory;
 
-$database = new Database();
-$db = $database->connect2database();
-$user = new User($db);
 
+require_once('api/user/User.php');
+require_once('api/message/mRouter.php');
+require_once('api/message/mConnection/sql/mConnectionSQLwDel.php');
+require_once('api/connectionSQL/DatabaseConfig.php');
+
+
+require __DIR__ . '\vendor\autoload.php'; //Windows machine
+
+$app = AppFactory::create();
+//TODO add allowed methods and headers
+//TODO write middleware for authentication
+
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+
+$app->post('/api/v1/initsession', function (Request $request, Response $response, $args) {
+    $database = new DatabaseConnection();
+    $db = $database->connect2database();
+    $user = new User($db);    
+    $response->getBody()->write(
+        json_encode(
+            $user->createSession($data->username)
+    ));
+    return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/api/v1/sendmessage', function (Request $request, Response $response, $args) {
+    $mr = new mRouter(new mConnectionSQLwDel(new DatabaseConfig()));
+    return $mr->mPost($request, $response, $args); // parses request from file_get_contents('php://input') I couldnt get to use request object with json :(
+});
+
+$app->run();
+
+/*
 $request = $_SERVER['REQUEST_URI'];
 $method = $_SERVER['REQUEST_METHOD'];
 
@@ -29,9 +56,6 @@ if($method!="POST"){
                     array("message" => "username must exist in body")
                 );
             }else{
-                echo json_encode(
-                    $user->createSession($data->username)
-                );
             }
             break;
         case '/api/v1/sendmessage':
@@ -84,5 +108,6 @@ if($method!="POST"){
             break;
     }
 }
+*/
 
 ?>
