@@ -1,9 +1,9 @@
 <?php
-
+require_once('api/message/Message.php');
 interface mConnectionInterface{
-    public function send($message);
-    public function recieve($id);
-    public function recieveAll($username); // Check if its SOLID or not
+    public function send($message): int;
+    public function recieve($id): Message;
+    public function recieveAll($username): array; //array of messages
 }
 
 ?>

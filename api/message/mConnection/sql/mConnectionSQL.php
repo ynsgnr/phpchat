@@ -1,7 +1,7 @@
 <?php
-
+require_once('api/message/Message.php');
 require_once('api/message/mConnection/interfaces/mConnectionInterface.php');
-include_once('api/connectionSQL/interfaces/databaseConnectionInterface.php');
+require_once('api/connectionSQL/interfaces/databaseConnectionInterface.php');
 
 class mConnectionSQL implements mConnectionInterface{
 
@@ -11,7 +11,7 @@ class mConnectionSQL implements mConnectionInterface{
         $this->connection = $db->connect2database();
     }
 
-    public function send($message){
+    public function send($message): int{
         if(isset($this->connection) === false or isset($message->sender) === false or isset($message->reciever) === false or isset($message->context) === false){
             throw new InvalidArgumentException("Please set sender,reciever and context!", 1);
         }
@@ -21,7 +21,7 @@ class mConnectionSQL implements mConnectionInterface{
         return $this->message_id;
     }
 
-    public function recieve($id){
+    public function recieve($id): Message{
         $query = $this->connection->prepare('SELECT context,sendby,sendat,sendto FROM messages WHERE id=? ;');
         $query->execute([$id]);
         $fetched = $query->fetchAll();
@@ -33,7 +33,7 @@ class mConnectionSQL implements mConnectionInterface{
         return $message;
     }
 
-    public function recieveAll($username){
+    public function recieveAll($username): array{
         $messages = array();
         $query = $this->connection->prepare('SELECT context,sendby,sendat FROM messages WHERE sendto=? ORDER BY sendat DESC;');
         $query->execute([$username]);

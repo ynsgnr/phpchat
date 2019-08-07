@@ -1,5 +1,5 @@
 <?php
 interface databaseConnectionInterface{
-    public function connect2database();
+    public function connect2database(): PDO;
 }
 ?>

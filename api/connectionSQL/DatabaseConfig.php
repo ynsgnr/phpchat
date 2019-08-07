@@ -17,7 +17,7 @@ class DatabaseConfig implements databaseConnectionInterface{
         $this->password = getenv("DB_PASS");
     }
  
-    public function connect2database(){
+    public function connect2database(): PDO{
  
         $this->connection = null;
  

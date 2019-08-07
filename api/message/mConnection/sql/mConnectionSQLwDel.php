@@ -6,9 +6,9 @@ require_once('api/message/mConnection/interfaces/mConnectionInterfaceWithDel.php
 // SQL Connection with delete option
 class mConnectionSQLwDel extends mConnectionSQL implements mConnectionInterfaceWithDel{
 
-    public function delete($id){
+    public function delete($id): bool{
         $query = $this->connection->prepare('DELETE FROM messages WHERE id=? ;');
-        $query->execute([$id]);
+        return $query->execute([$id]);
     }
 }
 
